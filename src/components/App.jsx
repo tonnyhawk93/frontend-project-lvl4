@@ -1,23 +1,60 @@
-import React from "react";
+import React, {useState} from "react";
+import AuthContext from "../context";
 import LoginPage from "../pages/LoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import {
+    Redirect,
     Route,
     Switch,
 } from 'react-router-dom';
+import useAuth from "../hooks";
 
-const App = () => (
-    <Switch>
-        <Route exact path="/login">
-            <LoginPage />
-        </Route>
-        <Route exact path="/">
-            <h1>Main</h1>
-        </Route>
-        <Route path="*">
-            <NotFoundPage />
-        </Route>
-    </Switch>
-);
+const AuthProvider = ({ children }) => {
+    const token = Boolean(localStorage.getItem('token'));
+    const [loggedIn, setLoggedIn] = useState(token);
+
+    const logIn = (token) => {
+        localStorage.setItem('token', token);
+        setLoggedIn(true);
+    }
+    const logOut = () => {
+      localStorage.removeItem('token');
+      setLoggedIn(false);
+    };
+  
+    return (
+      <AuthContext.Provider value={{ loggedIn, logIn, logOut }}>
+        {children}
+      </AuthContext.Provider>
+    );
+  };
+
+const PrivateRoute = ({ children }) => {
+    const auth = useAuth();
+
+    return (
+        auth.loggedIn ? children : <Redirect to="/login"/>
+    );
+};
+
+const App = () => {
+    return (
+        <AuthProvider>
+            <Switch>
+                <Route exact path="/login">
+                    <LoginPage />
+                </Route>
+                <Route exact path="/">
+                    <PrivateRoute>
+                        <h1>Main</h1>
+                    </PrivateRoute>
+                </Route>
+                <Route path="*">
+                    <NotFoundPage />
+                </Route>
+            </Switch>
+        </AuthProvider>
+    );
+} 
 
 export default App;

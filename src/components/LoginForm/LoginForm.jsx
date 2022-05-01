@@ -1,52 +1,68 @@
-import React from "react";
+import React, {useCallback, useEffect, useState} from "react";
+import {Redirect} from 'react-router-dom';
 import * as yup from 'yup';
 import { useFormik } from "formik";
 import cn from "classnames";
+import 'regenerator-runtime/runtime.js';
+import axios from 'axios';
+import useAuth from '../../hooks';
+import routes from '../../routes.js';
+
+const fetchLogInToken = async (values) => {
+    const {data: {token}} = await axios.post(routes.loginPath(), values);
+
+    return token;
+}
 
 const validationSchema = yup.object({
-    nickName: yup
-      .string('Enter your nickname')
-      .required('nickname is required'),
+    username: yup
+      .string('Enter your username')
+      .required('username is required'),
     password: yup
       .string('Enter your password')
-      .min(8, 'Password should be of minimum 8 characters length')
       .required('Password is required'),
   });
 
-const handleSubmit = (values, { setSubmitting }) => {
-    setTimeout(() => {
-    alert(JSON.stringify(values, null, 2));
-    setSubmitting(false);
-    }, 400);
-}
-
 const LoginForm = () => {
+    const {logIn} = useAuth();
+    const [submited, setSubmited] = useState(false);
+
+    const onSubmit = useCallback(async (values, { setSubmitting, setErrors }) => {
+        try {
+            const token = await fetchLogInToken(values);
+            logIn(token);
+            setSubmitting(false);
+            setSubmited(true);
+        } catch (error) {
+            setErrors({authorization: 'Неверные имя пользователя или пароль'})
+            setSubmitting(false);
+        }
+    }, [logIn]);
+
     const formik = useFormik({
         initialValues: {
-          nickName: '',
+          username: '',
           password: '',
         },
         validationSchema,
-        onSubmit: handleSubmit,
+        onSubmit,
       });
 
     return (
         <div>
+            {submited && <Redirect to='/'/>}
             <h2>Войти</h2>
             <form onSubmit={formik.handleSubmit}>
                 <div className="form-group mb-2">
                     <input
-                        id="nickName"
-                        name="nickName"
+                        id="username"
+                        name="username"
                         placeholder="Ваш ник"
-                        className={cn("form-control", {"is-invalid" : formik.errors.firstName && formik.touched.nickName})}
-                        value={formik.values.nickName}
+                        className={cn("form-control", {"is-invalid" : formik.errors.authorization})}
+                        value={formik.values.username}
                         onChange={formik.handleChange}
                         required
                     />
-                    {formik.errors.nickName && formik.touched.nickName && (
-                        <div className="invalid-feedback">{formik.errors.firstName}</div>
-                    )}
                 </div>
                 <div className="form-group">
                     <input
@@ -54,16 +70,16 @@ const LoginForm = () => {
                         name="password"
                         placeholder="Пароль"
                         type="password"
-                        className={cn("form-control", {"is-invalid" : formik.errors.password && formik.touched.password})}
+                        className={cn("form-control", {"is-invalid" : formik.errors.authorization})}
                         value={formik.values.password}
                         onChange={formik.handleChange}
                         required
                     />
-                    {formik.errors.password && formik.touched.password && (
-                        <div className="invalid-feedback">{formik.errors.password}</div>
+                    {formik.errors.authorization && (
+                        <div className="invalid-feedback">{formik.errors.authorization}</div>
                     )}
                 </div>
-                <button type="submit" className="btn btn-primary mt-3">
+                <button type="submit" className="btn btn-primary mt-3" disabled={formik.isSubmitting}>
                     Войти
                 </button>
             </form>
@@ -72,3 +88,11 @@ const LoginForm = () => {
 }
 
 export default LoginForm;
+
+// const token = localStorage.getItem('token');
+            
+// const res = await axios.get(routes.dataPath(), {
+//     headers: {
+//       'authorization': 'Bearer' + ' ' + token
+//     }
+//   });
