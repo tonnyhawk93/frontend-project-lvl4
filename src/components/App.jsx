@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import AuthContext from "../context";
 import LoginPage from "../pages/LoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
+import ChatsPage from "../pages/ChatsPage";
 import {
     Redirect,
     Route,
@@ -46,7 +47,7 @@ const App = () => {
                 </Route>
                 <Route exact path="/">
                     <PrivateRoute>
-                        <h1>Main</h1>
+                        <ChatsPage />
                     </PrivateRoute>
                 </Route>
                 <Route path="*">

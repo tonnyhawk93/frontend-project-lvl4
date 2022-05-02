@@ -89,10 +89,3 @@ const LoginForm = () => {
 
 export default LoginForm;
 
-// const token = localStorage.getItem('token');
-            
-// const res = await axios.get(routes.dataPath(), {
-//     headers: {
-//       'authorization': 'Bearer' + ' ' + token
-//     }
-//   });
