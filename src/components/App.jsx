@@ -14,13 +14,15 @@ const AuthProvider = ({ children }) => {
     const token = Boolean(localStorage.getItem('token'));
     const [loggedIn, setLoggedIn] = useState(token);
 
-    const logIn = (token) => {
+    const logIn = ({token, username}) => {
         localStorage.setItem('token', token);
+        localStorage.setItem('userName', username)
         setLoggedIn(true);
     }
     const logOut = () => {
-      localStorage.removeItem('token');
-      setLoggedIn(false);
+        localStorage.removeItem('token');
+        localStorage.removeItem('userName', username);
+        setLoggedIn(false);
     };
   
     return (

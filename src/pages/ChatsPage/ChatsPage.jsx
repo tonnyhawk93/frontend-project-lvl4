@@ -4,13 +4,20 @@ import ChatPanel from "../../components/ChatPanel";
 import {Spinner} from 'react-bootstrap';
 import { useDispatch, useSelector } from "react-redux";
 import { selectors as channelSelectors } from "../../slices/channelsSlice.js";
-import { selectors as messageSelectors } from "../../slices/messagesSlice.js";
+import { addMessage, selectors as messageSelectors } from "../../slices/messagesSlice.js";
 import { fetchData } from "../../thunks";
+import socket from "../../socket";
 
 const ChatsPage = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch(fetchData());
+    }, []);
+
+    useEffect(() => {
+        socket.on("newMessage", (message) => {
+            dispatch(addMessage(message));
+          });
     }, []);
 
     const initialChannelId = useSelector(state => state.channels.currentChannelId)
@@ -45,6 +52,7 @@ const ChatsPage = () => {
                     <ChatPanel 
                         messages={messages.filter(message => message.chanelId === currentChannelId)}
                         channelName={currentChannel?.name}
+                        currentChannelId={currentChannelId}
                     />
                 </div>
             }
@@ -53,32 +61,4 @@ const ChatsPage = () => {
 }
 
 export default ChatsPage;
-
-
-
-
-
-
-        // const fetchData = async () => {
-        //     const token = localStorage.getItem('token');
-                
-        //     const {data} = await axios.get(routes.dataPath(), {
-        //         headers: {
-        //         'authorization': 'Bearer' + ' ' + token
-        //         }
-        //     });
-
-        //     const channelSchema = new schema.Entity('channels');
-        //     const messageSchema = new schema.Entity('messages');
-
-        //     const normalizeData = normalize(data, {
-        //         channels: [channelSchema],
-        //         messages: [messageSchema],
-        //     });
-
-        //     setCurrentChannelId(normalizeData.result.currentChannelId);
-        //     dispatch(addChanels(normalizeData.entities.channels || {}));
-        //     dispatch(addMessages(normalizeData.entities.messages || {}));
-        // };
-
 

@@ -8,10 +8,10 @@ import axios from 'axios';
 import useAuth from '../../hooks';
 import routes from '../../routes.js';
 
-const fetchLogInToken = async (values) => {
-    const {data: {token}} = await axios.post(routes.loginPath(), values);
+const fetchLogInData = async (values) => {
+    const {data} = await axios.post(routes.loginPath(), values);
 
-    return token;
+    return data;
 }
 
 const validationSchema = yup.object({
@@ -29,8 +29,8 @@ const LoginForm = () => {
 
     const onSubmit = useCallback(async (values, { setSubmitting, setErrors }) => {
         try {
-            const token = await fetchLogInToken(values);
-            logIn(token);
+            const data = await fetchLogInData(values);
+            logIn(data);
             setSubmitting(false);
             setSubmited(true);
         } catch (error) {

@@ -9,7 +9,8 @@ const messagesSlice = createSlice({
     name: 'messages',
     initialState,
     reducers: {
-        addMessages: messagesAdapter.addMany
+        addMessages: messagesAdapter.addMany,
+        addMessage: messagesAdapter.addOne,
     },
     extraReducers: (builder) => {
         builder
@@ -29,7 +30,7 @@ const messagesSlice = createSlice({
       },
 })
 
-export const {addMessages} = messagesSlice.actions;
+export const {addMessages, addMessage} = messagesSlice.actions;
 
 export const selectors = messagesAdapter.getSelectors((state) => state.messages);
 
