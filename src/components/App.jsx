@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 import { I18nextProvider } from 'react-i18next';
+import 'react-toastify/dist/ReactToastify.min.css';
+import { ToastContainer } from 'react-toastify';
 import i18n from '../i18n';
 import AuthContext from "../context";
 import LoginPage from "../pages/LoginPage";
@@ -63,6 +65,7 @@ const App = () => {
                         <NotFoundPage />
                     </Route>
                 </Switch>
+                <ToastContainer />
             </AuthProvider>
         </I18nextProvider>
     );

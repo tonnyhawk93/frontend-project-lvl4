@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
 import cn from 'classnames';
 import * as yup from 'yup';
 import { useSelector } from 'react-redux';
@@ -32,6 +33,9 @@ const AddModal = ({show, handleClose}) => {
             handleClose();
             resetForm();
             setLoading(false);
+            toast.success(t('toasts.addMessage'), {
+                theme: 'light',
+            });
         })
     }
 

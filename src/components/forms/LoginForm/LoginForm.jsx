@@ -1,6 +1,7 @@
 import React, {useCallback, useState} from "react";
 import { useTranslation } from "react-i18next";
 import {Redirect} from 'react-router-dom';
+import { toast } from 'react-toastify';
 import * as yup from 'yup';
 import { useFormik } from "formik";
 import cn from "classnames";
@@ -35,9 +36,13 @@ const LoginForm = () => {
             logIn(data);
             setSubmitting(false);
             setSubmited(true);
-        } catch (error) {
-            setErrors({authorization: t('logInForm.errors.authorization')})
-            setSubmitting(false);
+        } catch ({message}) {
+            if ('Network Error') {
+                toast.error(t('toasts.errorMessage'));
+            }else {
+                setErrors({authorization: t('logInForm.errors.authorization')})
+                setSubmitting(false);
+            }
         }
     }, [logIn]);
 

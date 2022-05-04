@@ -1,6 +1,7 @@
 import React, {useEffect, useRef, useCallback, useState} from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
 import cn from 'classnames';
 import * as yup from 'yup';
 import { useSelector } from 'react-redux';
@@ -35,6 +36,7 @@ const EditModal = ({show, handleClose, editedChannelId}) => {
             handleClose();
             resetForm();
             setLoading(false);
+            toast.success(t('toasts.editMessage'));
         })
     }, [editedChannelId, handleClose])
 

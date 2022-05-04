@@ -80,6 +80,12 @@ export default {
                 rejectButton: 'Отменить',
                 text: 'Уверены?'
             },
+        },
+        toasts: {
+            addMessage: 'Канал успешно добавлен',
+            deleteMessage: 'Канал успешно удален',
+            editMessage: 'Канал успешно изменён',
+            errorMessage: 'Ошибка загрузки данных'
         }
 
     }

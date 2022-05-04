@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useTranslation } from "react-i18next";
+import { toast } from 'react-toastify';
 import socket from '../../../socket/index.js';
 
 const DeleteModal = ({show, handleClose, editedChannelId}) => {
@@ -12,6 +13,7 @@ const DeleteModal = ({show, handleClose, editedChannelId}) => {
         socket.emit('removeChannel', {id: editedChannelId}, () => {
             handleClose();
             setLoading(false);
+            toast.success(t('toasts.deleteMessage'));
         });
     }
 
