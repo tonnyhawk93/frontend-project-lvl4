@@ -1,5 +1,6 @@
 import React, {useCallback, useRef, useState} from 'react';
 import { useTranslation } from "react-i18next";
+import filter from 'leo-profanity';
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 import { useFormik } from "formik";
 import * as yup from 'yup';
@@ -8,6 +9,8 @@ import { io } from "socket.io-client";
 import {getUserName} from '../../../../helpers';
 
 const socket = io();
+
+filter.add(filter.getDictionary('ru'))
 
 const ChatForm = ({currentChannelId}) => {
     const inputRef = useRef(null);
@@ -23,7 +26,7 @@ const ChatForm = ({currentChannelId}) => {
     const onSubmit = useCallback(async (values, { setErrors, resetForm}) => {
         setDisabled(true);
         const message = {
-            text: values.messageText,
+            text: filter.clean(values.messageText),
             author: getUserName(),
             chanelId: currentChannelId,
         }
