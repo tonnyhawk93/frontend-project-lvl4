@@ -1,4 +1,5 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
+import { useTranslation } from "react-i18next";
 import {Redirect} from 'react-router-dom';
 import * as yup from 'yup';
 import { useFormik } from "formik";
@@ -14,25 +15,26 @@ const fetchSingUpData = async (values) => {
     return data;
 }
 
-const validationSchema = yup.object({
-    username: yup
-      .string('Enter your username')
-      .required('username is required')
-      .min(3, 'Имя должно содержать минимум три символа')
-      .max(20, 'Имя должно содержать максимум 20 символов'),
-    password: yup
-      .string('Enter your password')
-      .min(6, 'Пароль должени содержать как минимум 6 символов')
-      .required('Password is required'),
-    confirmationPassword: yup
-      .string('Enter your password')
-      .required('Password is required')
-      .oneOf([yup.ref('password'), null], 'Пароли не совпадают'),
-  });
-
 const SingUpForm = () => {
     const {logIn} = useAuth();
+    const {t} = useTranslation();
     const [submited, setSubmited] = useState(false);
+    
+    const validationSchema = yup.object({
+        username: yup
+          .string(t('singUpForm.errors.usernameIsRequired'))
+          .required(t('singUpForm.errors.usernameIsRequired'))
+          .min(3, t('singUpForm.errors.usernameMinCount'))
+          .max(20, t('singUpForm.errors.usernameMaxCount')),
+        password: yup
+          .string(t('singUpForm.errors.passwordIsRequired'))
+          .min(6, t('singUpForm.errors.passwordMinCount'))
+          .required(t('singUpForm.errors.passwordIsRequired')),
+        confirmationPassword: yup
+          .string(t('singUpForm.errors.passwordIsRequired'))
+          .required(t('singUpForm.errors.passwordIsRequired'))
+          .oneOf([yup.ref('password'), null], t('singUpForm.errors.passwordsNotEqual')),
+      });
 
     const onSubmit = useCallback(async ({username, password}, { setSubmitting, setErrors }) => {
         const user = {username, password};
@@ -61,13 +63,13 @@ const SingUpForm = () => {
     return (
         <div>
             {submited && <Redirect to='/'/>}
-            <h2>Регистрация</h2>
+            <h2>{t('singUpForm.title')}</h2>
             <form onSubmit={formik.handleSubmit}>
                 <div className="form-group mb-2">
                     <input
                         id="username"
                         name="username"
-                        placeholder="Имя пользователя"
+                        placeholder={t('singUpForm.usernamePlaceholder')}
                         className={cn("form-control", {"is-invalid" : formik.touched.username && (formik.errors.username || formik.errors.singup)})}
                         value={formik.values.username}
                         onChange={formik.handleChange}
@@ -81,7 +83,7 @@ const SingUpForm = () => {
                     <input
                         id="password"
                         name="password"
-                        placeholder="Пароль"
+                        placeholder={t('singUpForm.passwordPlaceholder')}
                         type="password"
                         className={cn("form-control", {"is-invalid" : formik.touched.password && formik.errors.password})}
                         value={formik.values.password}
@@ -96,7 +98,7 @@ const SingUpForm = () => {
                     <input
                         id="confirmationPassword"
                         name="confirmationPassword"
-                        placeholder="Подтвердите пароль"
+                        placeholder={t('singUpForm.passwordConfirmationPlaceholder')}
                         type="password"
                         className={cn("form-control", {"is-invalid" : formik.touched.confirmationPassword && formik.errors.confirmationPassword})}
                         value={formik.values.confirmationPassword}
@@ -108,7 +110,7 @@ const SingUpForm = () => {
                     )}
                 </div>
                 <button type="submit" className="btn btn-outline-primary mt-3" disabled={formik.isSubmitting}>
-                    Зарегистрироваться
+                    {t('singUpForm.buttonText')}
                 </button>
             </form>
         </div>

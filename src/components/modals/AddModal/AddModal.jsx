@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from "react-i18next";
 import cn from 'classnames';
 import * as yup from 'yup';
 import { useSelector } from 'react-redux';
@@ -10,14 +11,15 @@ import socket from '../../../socket';
 
 const AddModal = ({show, handleClose}) => {
     const [loading, setLoading] = useState(false);
+    const {t} = useTranslation();
     const channels = useSelector(state => Object.values(channelSelectors.selectEntities(state)));
     const names = channels.map(({name}) => name);
 
     const validationSchema = yup.object({
         channelName: yup
-          .string('Enter your username')
-          .required('Это поле обязательное')
-          .notOneOf(names, 'Такое имя уже существует')
+          .string(t('modal.addModal.errors.required'))
+          .required(t('modal.addModal.errors.required'))
+          .notOneOf(names, t('modal.addModal.errors.alredyExist'))
       });
 
     const onSubmit = (values, {resetForm}) => {
@@ -43,7 +45,7 @@ const AddModal = ({show, handleClose}) => {
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton={!loading}>
-            <Modal.Title>Добавить канал</Modal.Title>
+            <Modal.Title>{t('modal.addModal.title')}</Modal.Title>
             </Modal.Header>
             <form onSubmit={formik.handleSubmit}>
                 <Modal.Body>
@@ -65,10 +67,10 @@ const AddModal = ({show, handleClose}) => {
                 </Modal.Body> 
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose} disabled={loading}>
-                        Отменить
+                        {t('modal.addModal.rejectButton')}
                     </Button>
                     <Button variant="primary" type="submit" disabled={loading}>
-                        Отправить
+                        {t('modal.addModal.submitButton')}
                     </Button>
                 </Modal.Footer>      
             </form>

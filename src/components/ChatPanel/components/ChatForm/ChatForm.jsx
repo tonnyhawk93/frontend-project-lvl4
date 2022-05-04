@@ -1,4 +1,5 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useRef, useState} from 'react';
+import { useTranslation } from "react-i18next";
 import { ArrowRightSquare } from 'react-bootstrap-icons';
 import { useFormik } from "formik";
 import * as yup from 'yup';
@@ -8,16 +9,18 @@ import {getUserName} from '../../../../helpers';
 
 const socket = io();
 
-const validationSchema = yup.object({
-    messageText: yup
-      .string('Enter your username')
-      .required('message is required'),
-  });
-
 const ChatForm = ({currentChannelId}) => {
     const inputRef = useRef(null);
+    const {t} = useTranslation();
     const [disabled, setDisabled] = useState(false);
-    const onSubmit = useCallback(async (values, { setSubmitting, setErrors, resetForm}) => {
+    
+    const validationSchema = yup.object({
+        messageText: yup
+        .string(t('chats.sendMessageForm.errors.required'))
+        .required(t('chats.sendMessageForm.errors.required')),
+    });
+    
+    const onSubmit = useCallback(async (values, { setErrors, resetForm}) => {
         setDisabled(true);
         const message = {
             text: values.messageText,
@@ -35,7 +38,7 @@ const ChatForm = ({currentChannelId}) => {
             if (inputRef.current.disabled) {
                 setDisabled(false);
                 inputRef.current.focus();
-                setErrors({netError : 'Упс! Что-то пошло не так...'})
+                setErrors({netError : t('chats.sendMessageForm.errors.netError')})
             }
         }, 3000)
     }, [currentChannelId]);
@@ -53,7 +56,7 @@ const ChatForm = ({currentChannelId}) => {
                 <div className='input-group has-validation'>
                     <input 
                         className='border-0 p-0 ps-2 form-control' 
-                        placeholder="Введите сообщение..."
+                        placeholder={t('chats.sendMessageForm.sendMessagePlaceholder')}
                         id="messageText"
                         name="messageText"
                         value={formik.values.messageText}

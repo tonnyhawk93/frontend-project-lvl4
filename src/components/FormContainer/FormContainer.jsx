@@ -1,7 +1,10 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
 import {Link} from "react-router-dom";
 
 const FormContainer = ({children, withRegistatrationLink = true}) => {
+    const {t} = useTranslation();
+
     return (
         <div className="card">
             <div className="card-body row p-5">
@@ -12,7 +15,7 @@ const FormContainer = ({children, withRegistatrationLink = true}) => {
             {withRegistatrationLink && 
             <div className="card-footer p-4">
                 <div className="text-center">
-                    <span>Нет аккаунта? <Link to='/singup'>Регистрация</Link></span>
+                    <span>{t('logInForm.registrationLinkText')} <Link to='/singup'>{t('singUpForm.title')}</Link></span>
                 </div>
             </div>}
         </div>

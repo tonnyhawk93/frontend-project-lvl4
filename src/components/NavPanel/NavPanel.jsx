@@ -1,4 +1,5 @@
 import React, {useState, useCallback} from "react";
+import { useTranslation } from "react-i18next";
 import {AddModal, DeleteModal, EditModal} from '../modals/index.js';
 import { Dropdown } from "react-bootstrap";
 import { PlusSquare } from 'react-bootstrap-icons';
@@ -7,6 +8,7 @@ import cn from 'classnames';
 const NavPanel = ({items, selectCurrentItemId, currentItemId, initialChannel}) => {
     const [showedModal, setShowedModal] = useState(null);
     const [editedChannelId, setEditedChannelId] = useState(initialChannel.id);
+    const {t} = useTranslation();
 
     const handleClose = useCallback(() => setShowedModal(null), [setShowedModal]);
     
@@ -37,8 +39,8 @@ const NavPanel = ({items, selectCurrentItemId, currentItemId, initialChannel}) =
                         >
                         </Dropdown.Toggle>
                         <Dropdown.Menu onClick={() => setEditedChannelId(id)}>
-                            <Dropdown.Item onClick={showDeleteModal}>Удалить</Dropdown.Item>
-                            <Dropdown.Item onClick={showEditModal}>Переименовать</Dropdown.Item>
+                            <Dropdown.Item onClick={showDeleteModal}>{t('navPanel.dropdownMenu.delete')}</Dropdown.Item>
+                            <Dropdown.Item onClick={showEditModal}>{t('navPanel.dropdownMenu.rename')}</Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown> :
                     <button className={buttonClasses} onClick={() => selectCurrentItemId(id)}>
@@ -53,7 +55,7 @@ const NavPanel = ({items, selectCurrentItemId, currentItemId, initialChannel}) =
     return (
         <div className="col-4 col-md-2 border-end pt-5 px-0 bg-light">
             <div className="d-flex justify-content-between mb-2 ps-4 pe-2">
-                <span>Каналы</span>
+                <span>{t('navPanel.title')}</span>
                 <button className="p-0 text-primary btn btn-group-vertical" onClick={showAddModal}>
                     <PlusSquare size={20} color="royalblue"/>
                 </button>

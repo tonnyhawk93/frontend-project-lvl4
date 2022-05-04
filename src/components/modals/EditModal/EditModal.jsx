@@ -1,5 +1,6 @@
 import React, {useEffect, useRef, useCallback, useState} from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from "react-i18next";
 import cn from 'classnames';
 import * as yup from 'yup';
 import { useSelector } from 'react-redux';
@@ -10,6 +11,7 @@ import { selectors as channelSelectors } from "../../../slices/channelsSlice.js"
 
 const EditModal = ({show, handleClose, editedChannelId}) => {
     const [loading, setLoading] = useState(false);
+    const {t} = useTranslation();
     const currentChannel = useSelector(state => channelSelectors.selectById(state, editedChannelId));
     const channels = useSelector(state => Object.values(channelSelectors.selectEntities(state)));
     const names = channels.map(({name}) => name);
@@ -17,9 +19,9 @@ const EditModal = ({show, handleClose, editedChannelId}) => {
 
     const validationSchema = yup.object({
         channelName: yup
-          .string('Enter your username')
-          .required('Это поле обязательное')
-          .notOneOf(names, 'Такое имя уже существует')
+          .string(t('modal.editModal.errors.required'))
+          .required(t('modal.editModal.errors.required'))
+          .notOneOf(names, t('modal.editModal.errors.alredyExist'))
       });
 
     const onSubmit = useCallback((values, {resetForm}) => {
@@ -46,6 +48,7 @@ const EditModal = ({show, handleClose, editedChannelId}) => {
 
     useEffect(() => {
         if (show) {
+            formik.setFieldValue('channelName', currentChannel.name);
             inputRef.current.value = currentChannel.name;
             inputRef.current.select();
         }
@@ -54,7 +57,7 @@ const EditModal = ({show, handleClose, editedChannelId}) => {
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton={!loading}>
-            <Modal.Title>Переименовать канал</Modal.Title>
+            <Modal.Title>{t('modal.editModal.title')}</Modal.Title>
             </Modal.Header>
             <form onSubmit={formik.handleSubmit}>
                 <Modal.Body>
@@ -76,10 +79,10 @@ const EditModal = ({show, handleClose, editedChannelId}) => {
                 </Modal.Body> 
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose} disabled={loading}>
-                        Отменить
+                        {t('modal.editModal.rejectButton')}
                     </Button>
                     <Button variant="primary" type="submit" disabled={loading}>
-                        Отправить
+                        {t('modal.editModal.submitButton')}
                     </Button>
                 </Modal.Footer>      
             </form>

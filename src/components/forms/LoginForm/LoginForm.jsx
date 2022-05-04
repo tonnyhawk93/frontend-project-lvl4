@@ -1,4 +1,5 @@
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useState} from "react";
+import { useTranslation } from "react-i18next";
 import {Redirect} from 'react-router-dom';
 import * as yup from 'yup';
 import { useFormik } from "formik";
@@ -14,18 +15,19 @@ const fetchLogInData = async (values) => {
     return data;
 }
 
-const validationSchema = yup.object({
-    username: yup
-      .string('Enter your username')
-      .required('username is required'),
-    password: yup
-      .string('Enter your password')
-      .required('Password is required'),
-  });
-
 const LoginForm = () => {
     const {logIn} = useAuth();
+    const {t} = useTranslation();
     const [submited, setSubmited] = useState(false);
+
+    const validationSchema = yup.object({
+        username: yup
+          .string(t('logInForm.errors.usernameIsRequired'))
+          .required(t('logInForm.errors.usernameIsRequired')),
+        password: yup
+          .string(t('logInForm.errors.usernameIsRequired'))
+          .required(t('logInForm.errors.passwordIsRequired')),
+      });
 
     const onSubmit = useCallback(async (values, { setSubmitting, setErrors }) => {
         try {
@@ -34,7 +36,7 @@ const LoginForm = () => {
             setSubmitting(false);
             setSubmited(true);
         } catch (error) {
-            setErrors({authorization: 'Неверные имя пользователя или пароль'})
+            setErrors({authorization: t('logInForm.errors.authorization')})
             setSubmitting(false);
         }
     }, [logIn]);
@@ -51,13 +53,13 @@ const LoginForm = () => {
     return (
         <div>
             {submited && <Redirect to='/'/>}
-            <h2>Войти</h2>
+            <h2>{t('logInForm.title')}</h2>
             <form onSubmit={formik.handleSubmit}>
                 <div className="form-group mb-2">
                     <input
                         id="username"
                         name="username"
-                        placeholder="Ваш ник"
+                        placeholder={t('logInForm.usernamePlaceholder')}
                         className={cn("form-control", {"is-invalid" : formik.errors.authorization})}
                         value={formik.values.username}
                         onChange={formik.handleChange}
@@ -68,7 +70,7 @@ const LoginForm = () => {
                     <input
                         id="password"
                         name="password"
-                        placeholder="Пароль"
+                        placeholder={t('logInForm.passwordPlaceholder')}
                         type="password"
                         className={cn("form-control", {"is-invalid" : formik.errors.authorization})}
                         value={formik.values.password}
@@ -80,7 +82,7 @@ const LoginForm = () => {
                     )}
                 </div>
                 <button type="submit" className="btn btn-primary mt-3" disabled={formik.isSubmitting}>
-                    Войти
+                    {t('logInForm.buttonText')}
                 </button>
             </form>
         </div>

@@ -1,15 +1,19 @@
 import React from "react";
+import { useTranslation } from "react-i18next";
+
 import PageLayout from "../../components/PageLayout";
 import Container from "../../components/Container";
 import {Link} from 'react-router-dom';
 
 const NotFoundPage = () => {
+    const {t} = useTranslation();
+
     return <PageLayout>
         <Container>
             <div className="row justify-content-center align-content-center h-100">
                 <div className="col-4">
-                    <h2>Страница не найдена</h2>
-                    <span>Но вы можете перейти <Link to="/">на главную страницу</Link></span>
+                    <h2>{t('notFound.title')}</h2>
+                    <span>{t('notFound.message')}<Link to="/">{t('notFound.linkText')}</Link></span>
                 </div>
             </div>
         </Container>

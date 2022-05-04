@@ -1,9 +1,11 @@
 import React, {useState} from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import { useTranslation } from "react-i18next";
 import socket from '../../../socket/index.js';
 
 const DeleteModal = ({show, handleClose, editedChannelId}) => {
     const [loading, setLoading] = useState(false);
+    const {t} = useTranslation();
 
     const handleSubmit = () => {
         setLoading(true);
@@ -16,15 +18,15 @@ const DeleteModal = ({show, handleClose, editedChannelId}) => {
     return (
         <Modal show={show} onHide={handleClose}>
             <Modal.Header closeButton={!loading}>
-            <Modal.Title>Удалить канал</Modal.Title>
+            <Modal.Title>{t('modal.deleteModal.title')}</Modal.Title>
             </Modal.Header>
-                <Modal.Body>Уверены?</Modal.Body> 
+                <Modal.Body>{t('modal.deleteModal.text')}</Modal.Body> 
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleClose} disabled={loading}>
-                        Отменить
+                        {t('modal.deleteModal.rejectButton')}
                     </Button>
                     <Button variant="danger" type="submit" onClick={handleSubmit} disabled={loading}>
-                        Удалить
+                        {t('modal.deleteModal.submitButton')}
                     </Button>
                 </Modal.Footer>    
         </Modal>
