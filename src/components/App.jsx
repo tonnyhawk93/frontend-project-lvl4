@@ -3,6 +3,7 @@ import AuthContext from "../context";
 import LoginPage from "../pages/LoginPage";
 import NotFoundPage from "../pages/NotFoundPage";
 import ChatsPage from "../pages/ChatsPage";
+import SingUpPage from "../pages/SingUpPage";
 import {
     Redirect,
     Route,
@@ -21,7 +22,7 @@ const AuthProvider = ({ children }) => {
     }
     const logOut = () => {
         localStorage.removeItem('token');
-        localStorage.removeItem('userName', username);
+        localStorage.removeItem('userName');
         setLoggedIn(false);
     };
   
@@ -46,6 +47,9 @@ const App = () => {
             <Switch>
                 <Route exact path="/login">
                     <LoginPage />
+                </Route>
+                <Route exact path="/singup">
+                    <SingUpPage />
                 </Route>
                 <Route exact path="/">
                     <PrivateRoute>

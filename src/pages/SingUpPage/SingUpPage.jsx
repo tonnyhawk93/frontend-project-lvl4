@@ -1,17 +1,17 @@
 import React from "react";
 import PageLayout from "../../components/PageLayout";
-import LoginForm from "../../components/forms/LoginForm";
+import SingUpForm from "../../components/forms/SingUpForm";
 import Container from "../../components/Container";
 import FormContainer from "../../components/FormContainer";
 
-const LoginPage = () => (
+const SingUpPage = () => (
     <PageLayout>
         <Container>
             <div className="row justify-content-center align-content-center h-100">
                 <div className="col-12 col-md-8 col-xxl-6">
-                    <FormContainer>
+                    <FormContainer withRegistatrationLink={false}>
                         <div className="col-xs-8 col-12">
-                            <LoginForm />
+                            <SingUpForm />
                         </div>
                     </FormContainer>
                 </div>
@@ -20,4 +20,4 @@ const LoginPage = () => (
     </PageLayout>
 );
 
-export default LoginPage;
+export default SingUpPage;

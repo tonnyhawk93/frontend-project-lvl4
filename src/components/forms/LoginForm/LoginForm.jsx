@@ -5,8 +5,8 @@ import { useFormik } from "formik";
 import cn from "classnames";
 import 'regenerator-runtime/runtime.js';
 import axios from 'axios';
-import useAuth from '../../hooks';
-import routes from '../../routes.js';
+import useAuth from '../../../hooks/index.js';
+import routes from '../../../routes.js';
 
 const fetchLogInData = async (values) => {
     const {data} = await axios.post(routes.loginPath(), values);
