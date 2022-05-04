@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 import { normalize, schema } from "normalizr";
+import { getToken } from "../helpers/index.js";
 
 import routes from '../routes.js';
 
@@ -19,11 +20,9 @@ const normalizeData = (data) => {
 export const fetchData = createAsyncThunk(
     'channels/fetchData',
     async () => {
-        const token = localStorage.getItem('token');
-            
         const {data} = await axios.get(routes.dataPath(), {
             headers: {
-            'authorization': 'Bearer' + ' ' + token
+            'authorization': 'Bearer' + ' ' + getToken()
             }
         });
 
