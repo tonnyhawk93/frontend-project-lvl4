@@ -1,3 +1,3 @@
-import Component from "./LoginPage.jsx";
+import Component from './LoginPage.jsx';
 
 export default Component;
