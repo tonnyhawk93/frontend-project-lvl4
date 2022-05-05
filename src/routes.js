@@ -11,4 +11,3 @@ export default {
   signupPath: () => [host, prefix, 'signup'].join('/'),
   dataPath: () => [host, prefix, 'data'].join('/'),
 };
-
