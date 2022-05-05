@@ -1,5 +1,6 @@
+/* eslint-disable no-param-reassign */
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
-import { fetchData } from '../thunks/index.js';
+import fetchData from '../thunks/index.js';
 
 const channelsAdapter = createEntityAdapter();
 
@@ -11,16 +12,16 @@ const channelsSlice = createSlice({
   reducers: {
     addChannels: channelsAdapter.addMany,
     addChannel: channelsAdapter.addOne,
-    removeChannel: (state, {payload: id}) => {
+    removeChannel: (state, { payload: id }) => {
       if (id === state.currentChannelId) {
         state.currentChannelId = state.defaultChannelId;
       }
       channelsAdapter.removeOne(state, id);
-    }, 
+    },
     renameChannel: channelsAdapter.upsertOne,
-    setCurrentChannelId: (state, {payload}) => {
+    setCurrentChannelId: (state, { payload }) => {
       state.currentChannelId = payload;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -28,7 +29,7 @@ const channelsSlice = createSlice({
         state.loading = 'loading';
         state.error = null;
       })
-      .addCase(fetchData.fulfilled, (state, {payload}) => {
+      .addCase(fetchData.fulfilled, (state, { payload }) => {
         channelsAdapter.addMany(state, payload.entities.channels || {});
         state.currentChannelId = payload.result.currentChannelId;
         state.defaultChannelId = payload.result.currentChannelId;
@@ -42,7 +43,9 @@ const channelsSlice = createSlice({
   },
 });
 
-export const { addChannels, addChannel, removeChannel, renameChannel, setCurrentChannelId} = channelsSlice.actions;
+export const {
+  addChannels, addChannel, removeChannel, renameChannel, setCurrentChannelId,
+} = channelsSlice.actions;
 
 export const selectors = channelsAdapter.getSelectors((state) => state.channels);
 

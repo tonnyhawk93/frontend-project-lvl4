@@ -1,8 +1,11 @@
-import React from "react";
+import React from 'react';
 
-const Container = ({children}) => 
+function Container({ children }) {
+  return (
     <div className="container-fluid h-100">
-        {children}
+      {children}
     </div>
+  );
+}
 
 export default Container;
