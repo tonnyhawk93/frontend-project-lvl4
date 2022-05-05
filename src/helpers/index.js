@@ -1,7 +1,3 @@
-export const getUserName = () => {
-    return localStorage.getItem('userName');
-}
+export const getUserName = () => localStorage.getItem('userName');
 
-export const getToken = () => {
-    return localStorage.getItem('token');
-}
+export const getToken = () => localStorage.getItem('token');
