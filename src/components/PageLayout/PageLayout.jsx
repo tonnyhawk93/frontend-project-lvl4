@@ -1,10 +1,13 @@
-import React from "react";
-import Header from "../Header";
+import React from 'react';
+import Header from '../Header';
 
-const PageLayout = ({children}) => 
+function PageLayout({ children }) {
+  return (
     <div className="d-flex flex-column h-100">
-        <Header />
-        {children}
+      <Header />
+      {children}
     </div>
+  );
+}
 
 export default PageLayout;
