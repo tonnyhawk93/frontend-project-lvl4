@@ -1,3 +1,3 @@
-import Component from "./ChatForm.jsx";
+import Component from './ChatForm.jsx';
 
 export default Component;
